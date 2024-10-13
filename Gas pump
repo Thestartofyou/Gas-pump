@@ -1,0 +1,53 @@
+import datetime
+
+# Function to add a new fill-up entry
+def add_fillup():
+    date = input("Enter the date of fill-up (YYYY-MM-DD): ")
+    mileage = float(input("Enter the current odometer reading (miles): "))
+    gas = float(input("Enter the amount of gas added (gallons): "))
+    
+    fillup = {
+        'date': datetime.datetime.strptime(date, '%Y-%m-%d'),
+        'mileage': mileage,
+        'gas': gas
+    }
+    
+    return fillup
+
+# Function to calculate fuel efficiency (MPG)
+def calculate_mpg(prev_fillup, current_fillup):
+    distance = current_fillup['mileage'] - prev_fillup['mileage']
+    gas_used = current_fillup['gas']
+    
+    if gas_used == 0:
+        return 0
+    return distance / gas_used
+
+# Main function to track gas usage
+def track_gas_usage():
+    fillups = []
+    
+    while True:
+        print("\n--- Gas Usage Tracker ---")
+        print("1. Add a new fill-up")
+        print("2. View fuel efficiency (MPG)")
+        print("3. Exit")
+        choice = input("Choose an option: ")
+        
+        if choice == '1':
+            fillups.append(add_fillup())
+        elif choice == '2':
+            if len(fillups) < 2:
+                print("Not enough data to calculate MPG.")
+            else:
+                prev_fillup = fillups[-2]
+                current_fillup = fillups[-1]
+                mpg = calculate_mpg(prev_fillup, current_fillup)
+                print(f"Your fuel efficiency is: {mpg:.2f} MPG")
+        elif choice == '3':
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+if __name__ == "__main__":
+    track_gas_usage()
